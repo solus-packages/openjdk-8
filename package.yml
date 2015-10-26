@@ -1,0 +1,77 @@
+name       : openjdk-8
+version    : 8.60
+release    : 2
+source     :
+    - http://hg.openjdk.java.net/jdk8u/jdk8u60/archive/jdk8u60-b27.tar.bz2 : 8fa60af48d69baa4fe509adf8ac0951422038f10d94e5afd244858902b4010e3
+    - http://solus-us.tk/sources/openjdk-8-b27/corba.tar.bz2 : 33d89bba48373967ebacbaa77694c2c54161064aea7a3939922e6bcc4356b422
+    - http://solus-us.tk/sources/openjdk-8-b27/hotspot.tar.bz2 : 013a3c38737fa102df91fb286663917af909c9338e470a4a5a877f862ad25b83
+    - http://solus-us.tk/sources/openjdk-8-b27/jaxp.tar.bz2 : 1838a4c3d31c724a28d202a83792b5e5989b3e53c2ce8101c850875a0375693f
+    - http://solus-us.tk/sources/openjdk-8-b27/jaxws.tar.bz2 : 3de04a4ea4f0b0e0235a1e3b3fbffdd1f514f79605c33431df0378cacc3efdc6
+    - http://solus-us.tk/sources/openjdk-8-b27/jdk.tar.bz2 : 7ddd54658a093c1110436fa0745cec503a9283cca8c95e12fff5275e82997c76
+    - http://solus-us.tk/sources/openjdk-8-b27/langtools.tar.bz2 : 42d61d6b676fb7ff71a673108a890a4622a0fefc9a311716b5a92a5c07c5cbff
+    - http://solus-us.tk/sources/openjdk-8-b27/nashorn.tar.bz2 : 6da9dea77e50f703e58da2c0c223ba105f4ea133046865767c84a47b73a7c11c
+license    : GPL-2.0-with-classpath-exception
+summary    : Open implementation of Oracle's Java Development Kit
+description: |
+    Open implementation of Oracle's Java Development Kit
+builddeps  :
+    - cups-devel
+    - giflib-devel
+    - pkgconfig(alsa)
+    - pkgconfig(fontconfig)
+    - pkgconfig(x11)
+    - pkgconfig(xext)
+    - pkgconfig(xrender)
+    - pkgconfig(xt)
+    - pkgconfig(xtst)
+    - p7zip
+    - openjdk-8
+setup      : |
+    unset LD_AS_NEEDED
+    for subproject in corba hotspot jaxp jaxws langtools jdk nashorn; do
+      mkdir -pv ${subproject} &&
+      tar -xf $sources/${subproject}.tar.bz2 --strip-components=1 -C ${subproject}
+    done
+    sed -e 's/(hi - lo)/ hi - lo /' \
+      -e 's/(lo - hi)/ lo - hi /' \
+      -i hotspot/src/share/vm/opto/type.cpp
+    unset JAVA_HOME
+    sh ./configure --with-update-version=60 \
+                   --with-build-number=b27 \
+                   --enable-unlimited-crypto \
+                   --with-zlib=system \
+                   --with-giflib=system \
+                   --with-boot-jdk=/opt/jdk1.8.0_60/ \
+                   --with-cacerts-file=/opt/jdk1.8.0_60/jre/lib/security/cacerts
+build      : |
+    unset LD_AS_NEEDED
+    CFLAGS="${CFLAGS/-D_FORTIFY_SOURCE=2/}"
+    make bootcycle-images DISABLE_HOTSPOT_OS_VERSION_CHECK=ok
+install    : |
+    # remove redundant *.diz and *.debuginfo files
+    find . -iname "*.diz" -exec rm -f {} \;
+    find . -iname '*.debuginfo' -exec rm {} \;
+    mkdir -p %installroot%/usr/bin
+    mkdir -p %installroot%/usr/lib64/openjdk-8
+    mkdir -p %installroot%/usr/share/doc/openjdk-8
+    mkdir -p %installroot%/usr/include/openjdk-8
+    mkdir -p %installroot%/usr/share/licenses/openjdk-8
+    cd build/linux-x86_64-normal-server-release
+    cp -r jdk/{bin,lib,classes} %installroot%/usr/lib64/openjdk-8/
+    cp -r images/lib/* %installroot%/usr/lib64/openjdk-8/lib/
+    pushd %installroot%/usr/lib64/openjdk-8/bin
+    for f in *
+      do ln -sf /usr/lib64/openjdk-8/bin/$f %installroot%/usr/bin/
+    done
+    popd
+    cp -r jdk/include/* %installroot%/usr/include/openjdk-8/
+    # License
+    cp images/j2re-image/LICENSE %installroot%/usr/share/licenses/openjdk-8
+    # Man pages
+    pushd images/j2sdk-image/man/man1/
+    for i in *.1
+      do install -D -m 644 $i %installroot%/usr/share/man/man1/$i
+    done
+    popd
+    # http://icedtea.classpath.org/bugzilla/show_bug.cgi?id=1437
+    find %installroot% -iname '*.jar' -exec chmod ugo+r {} \;
