@@ -1,15 +1,15 @@
 name       : openjdk-8
-version    : 8.60
-release    : 2
+version    : 8.101
+release    : 3
 source     :
-    - http://hg.openjdk.java.net/jdk8u/jdk8u60/archive/jdk8u60-b27.tar.bz2 : 8fa60af48d69baa4fe509adf8ac0951422038f10d94e5afd244858902b4010e3
-    - http://solus-us.tk/sources/openjdk-8-b27/corba.tar.bz2 : 33d89bba48373967ebacbaa77694c2c54161064aea7a3939922e6bcc4356b422
-    - http://solus-us.tk/sources/openjdk-8-b27/hotspot.tar.bz2 : 013a3c38737fa102df91fb286663917af909c9338e470a4a5a877f862ad25b83
-    - http://solus-us.tk/sources/openjdk-8-b27/jaxp.tar.bz2 : 1838a4c3d31c724a28d202a83792b5e5989b3e53c2ce8101c850875a0375693f
-    - http://solus-us.tk/sources/openjdk-8-b27/jaxws.tar.bz2 : 3de04a4ea4f0b0e0235a1e3b3fbffdd1f514f79605c33431df0378cacc3efdc6
-    - http://solus-us.tk/sources/openjdk-8-b27/jdk.tar.bz2 : 7ddd54658a093c1110436fa0745cec503a9283cca8c95e12fff5275e82997c76
-    - http://solus-us.tk/sources/openjdk-8-b27/langtools.tar.bz2 : 42d61d6b676fb7ff71a673108a890a4622a0fefc9a311716b5a92a5c07c5cbff
-    - http://solus-us.tk/sources/openjdk-8-b27/nashorn.tar.bz2 : 6da9dea77e50f703e58da2c0c223ba105f4ea133046865767c84a47b73a7c11c
+    - http://hg.openjdk.java.net/jdk8u/jdk8u/archive/jdk8u101-b13.tar.bz2 : 4c63c8ebc31a1c54fe5b09941bf80620afde45b7942fcbe3e64bdb6aaa6e49b8
+    - http://localhost/corba.tar.bz2 : 04fb9f54256c9869e27930f876c18894a1656528d0ded0affeba0b4213091e3b
+    - http://localhost/hotspot.tar.bz2 : b099d3bcdd9e84c865fcc6f4460a8cf81ce6e83146a456ebb477755f146d252f
+    - http://localhost/jaxp.tar.bz2 : 3d62f0e214bc75bcd4a4ab349d9ccf27f6d518065e3331e5f46cce4bb053160a
+    - http://localhost/jaxws.tar.bz2 : 7ee42fac8ff36a5586046c9c52f86ccbb3d8327fd8d5a34171be27d466c8f34e
+    - http://localhost/jdk.tar.bz2 : 2ba88f40997d1d6cb1c98fc5b60393fbc79794db14c8bfa9a496ae94482b3139
+    - http://localhost/langtools.tar.bz2 : ff8cffd3eba52ac45926900c86b0a8d8fbe09e81779054ac9a7e78bf83c08d23
+    - http://localhost/nashorn.tar.bz2 : 3f43a76b6432c21d049dcd002b13d37cbb3b2b6f56bb7d77d0b8273e2abefad1
 license    : GPL-2.0-with-classpath-exception
 summary    : Open implementation of Oracle's Java Development Kit
 description: |
@@ -25,53 +25,59 @@ builddeps  :
     - pkgconfig(xt)
     - pkgconfig(xtst)
     - p7zip
-    - openjdk-8
 setup      : |
     unset LD_AS_NEEDED
     for subproject in corba hotspot jaxp jaxws langtools jdk nashorn; do
       mkdir -pv ${subproject} &&
       tar -xf $sources/${subproject}.tar.bz2 --strip-components=1 -C ${subproject}
     done
-    sed -e 's/(hi - lo)/ hi - lo /' \
-      -e 's/(lo - hi)/ lo - hi /' \
-      -i hotspot/src/share/vm/opto/type.cpp
     unset JAVA_HOME
-    sh ./configure --with-update-version=60 \
-                   --with-build-number=b27 \
+    sh ./configure --with-update-version=101 \
+                   --with-build-number=b13 \
+                   --with-milestone=fcs \
                    --enable-unlimited-crypto \
                    --with-zlib=system \
                    --with-giflib=system \
-                   --with-boot-jdk=/opt/jdk1.8.0_60/ \
-                   --with-cacerts-file=/opt/jdk1.8.0_60/jre/lib/security/cacerts
+                   --with-boot-jdk=/opt/jdk1.8.0_101/ \
+                   --with-cacerts-file=/opt/jdk1.8.0_101/jre/lib/security/cacerts \
+                   --with-extra-cflags="-std=c++98 -Wno-error -fno-delete-null-pointer-checks -fno-lifetime-dse" \
+                   --with-extra-cxxflags="-std=c++98 -fno-delete-null-pointer-checks -fno-lifetime-dse" \
+                   --with-extra-ldflags="$LDFLAGS"
 build      : |
     unset LD_AS_NEEDED
     CFLAGS="${CFLAGS/-D_FORTIFY_SOURCE=2/}"
-    make bootcycle-images DISABLE_HOTSPOT_OS_VERSION_CHECK=ok
+    make bootcycle-images SCTP_WERROR= DISABLE_HOTSPOT_OS_VERSION_CHECK=ok
 install    : |
     # remove redundant *.diz and *.debuginfo files
     find . -iname "*.diz" -exec rm -f {} \;
     find . -iname '*.debuginfo' -exec rm {} \;
-    mkdir -p %installroot%/usr/bin
-    mkdir -p %installroot%/usr/lib64/openjdk-8
+    # install jvm
+    mkdir -p %installroot%/usr
+    mkdir -p %installroot%/usr/lib64
+    make install INSTALL_PREFIX=%installroot%/usr
+    rm -rf %installroot%/usr/bin/*
+    mv %installroot%/usr/jvm/openjdk-1.8.0_101 %installroot%/usr/lib64/openjdk-8
+    rmdir %installroot%/usr/jvm
+    pushd %installroot%/usr/bin
+    for i in %installroot%/usr/lib64/openjdk-8/bin/*; do
+      ln -sf /usr/lib64/openjdk-8/bin/`basename $i` .
+    done
+    popd
     mkdir -p %installroot%/usr/share/doc/openjdk-8
     mkdir -p %installroot%/usr/include/openjdk-8
     mkdir -p %installroot%/usr/share/licenses/openjdk-8
-    cd build/linux-x86_64-normal-server-release
-    cp -r jdk/{bin,lib,classes} %installroot%/usr/lib64/openjdk-8/
-    cp -r images/lib/* %installroot%/usr/lib64/openjdk-8/lib/
-    pushd %installroot%/usr/lib64/openjdk-8/bin
-    for f in *
-      do ln -sf /usr/lib64/openjdk-8/bin/$f %installroot%/usr/bin/
-    done
-    popd
-    cp -r jdk/include/* %installroot%/usr/include/openjdk-8/
+    cp -r ./build/linux-x86_64-normal-server-release/jdk/include/* %installroot%/usr/include/openjdk-8/
     # License
-    cp images/j2re-image/LICENSE %installroot%/usr/share/licenses/openjdk-8
+    cp LICENSE %installroot%/usr/share/licenses/openjdk-8
     # Man pages
-    pushd images/j2sdk-image/man/man1/
-    for i in *.1
-      do install -D -m 644 $i %installroot%/usr/share/man/man1/$i
+    for dir in ./build/linux-x86_64-normal-server-release/images/j2re-image/man/man1/ \
+               ./build/linux-x86_64-normal-server-release/images/j2sdk-image/man/man1/
+    do
+      pushd $dir
+      for i in *.1
+        do install -D -m 644 $i %installroot%/usr/share/man/man1/$i
+      done
+      popd
     done
-    popd
     # http://icedtea.classpath.org/bugzilla/show_bug.cgi?id=1437
     find %installroot% -iname '*.jar' -exec chmod ugo+r {} \;
