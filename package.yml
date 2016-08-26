@@ -1,6 +1,6 @@
 name       : openjdk-8
 version    : 8.101
-release    : 4
+release    : 5
 source     :
     - http://hg.openjdk.java.net/jdk8u/jdk8u/archive/jdk8u101-b13.tar.bz2 : 4c63c8ebc31a1c54fe5b09941bf80620afde45b7942fcbe3e64bdb6aaa6e49b8
     - https://solus-project.com/sources/java/corba-u101-b13.tar.bz2 : 04fb9f54256c9869e27930f876c18894a1656528d0ded0affeba0b4213091e3b
