@@ -1,15 +1,15 @@
 name       : openjdk-8
 version    : 8.101
-release    : 3
+release    : 4
 source     :
     - http://hg.openjdk.java.net/jdk8u/jdk8u/archive/jdk8u101-b13.tar.bz2 : 4c63c8ebc31a1c54fe5b09941bf80620afde45b7942fcbe3e64bdb6aaa6e49b8
-    - http://localhost/corba.tar.bz2 : 04fb9f54256c9869e27930f876c18894a1656528d0ded0affeba0b4213091e3b
-    - http://localhost/hotspot.tar.bz2 : b099d3bcdd9e84c865fcc6f4460a8cf81ce6e83146a456ebb477755f146d252f
-    - http://localhost/jaxp.tar.bz2 : 3d62f0e214bc75bcd4a4ab349d9ccf27f6d518065e3331e5f46cce4bb053160a
-    - http://localhost/jaxws.tar.bz2 : 7ee42fac8ff36a5586046c9c52f86ccbb3d8327fd8d5a34171be27d466c8f34e
-    - http://localhost/jdk.tar.bz2 : 2ba88f40997d1d6cb1c98fc5b60393fbc79794db14c8bfa9a496ae94482b3139
-    - http://localhost/langtools.tar.bz2 : ff8cffd3eba52ac45926900c86b0a8d8fbe09e81779054ac9a7e78bf83c08d23
-    - http://localhost/nashorn.tar.bz2 : 3f43a76b6432c21d049dcd002b13d37cbb3b2b6f56bb7d77d0b8273e2abefad1
+    - https://solus-project.com/sources/java/corba-u101-b13.tar.bz2 : 04fb9f54256c9869e27930f876c18894a1656528d0ded0affeba0b4213091e3b
+    - https://solus-project.com/sources/java/hotspot-u101-b13.tar.bz2 : b099d3bcdd9e84c865fcc6f4460a8cf81ce6e83146a456ebb477755f146d252f
+    - https://solus-project.com/sources/java/jaxp-u101-b13.tar.bz2 : 3d62f0e214bc75bcd4a4ab349d9ccf27f6d518065e3331e5f46cce4bb053160a
+    - https://solus-project.com/sources/java/jaxws-u101-b13.tar.bz2: 7ee42fac8ff36a5586046c9c52f86ccbb3d8327fd8d5a34171be27d466c8f34e
+    - https://solus-project.com/sources/java/jdk-u101-b13.tar.bz2 : 2ba88f40997d1d6cb1c98fc5b60393fbc79794db14c8bfa9a496ae94482b3139
+    - https://solus-project.com/sources/java/langtools-u101-b13.tar.bz2 : ff8cffd3eba52ac45926900c86b0a8d8fbe09e81779054ac9a7e78bf83c08d23
+    - https://solus-project.com/sources/java/nashorn-u101-b13.tar.bz2 : 3f43a76b6432c21d049dcd002b13d37cbb3b2b6f56bb7d77d0b8273e2abefad1
 license    : GPL-2.0-with-classpath-exception
 summary    : Open implementation of Oracle's Java Development Kit
 description: |
@@ -17,6 +17,7 @@ description: |
 builddeps  :
     - cups-devel
     - giflib-devel
+    - openjdk-8-devel
     - pkgconfig(alsa)
     - pkgconfig(fontconfig)
     - pkgconfig(x11)
@@ -27,10 +28,12 @@ builddeps  :
     - p7zip
 setup      : |
     unset LD_AS_NEEDED
+    _SOLJVM_VERSION="u101-b13"
     for subproject in corba hotspot jaxp jaxws langtools jdk nashorn; do
       mkdir -pv ${subproject} &&
-      tar -xf $sources/${subproject}.tar.bz2 --strip-components=1 -C ${subproject}
+      tar -xf $sources/${subproject}-${_SOLJVM_VERSION}.tar.bz2 --strip-components=1 -C ${subproject}
     done
+    unset _SOLJVM_VERSION
     unset JAVA_HOME
     sh ./configure --with-update-version=101 \
                    --with-build-number=b13 \
@@ -38,46 +41,45 @@ setup      : |
                    --enable-unlimited-crypto \
                    --with-zlib=system \
                    --with-giflib=system \
-                   --with-boot-jdk=/opt/jdk1.8.0_101/ \
-                   --with-cacerts-file=/opt/jdk1.8.0_101/jre/lib/security/cacerts \
+                   --with-boot-jdk=%libdir%/openjdk-8/ \
+                   --with-cacerts-file=%libdir%/openjdk-8/jre/lib/security/cacerts \
                    --with-extra-cflags="-std=c++98 -Wno-error -fno-delete-null-pointer-checks -fno-lifetime-dse" \
                    --with-extra-cxxflags="-std=c++98 -fno-delete-null-pointer-checks -fno-lifetime-dse" \
                    --with-extra-ldflags="$LDFLAGS"
 build      : |
     unset LD_AS_NEEDED
     CFLAGS="${CFLAGS/-D_FORTIFY_SOURCE=2/}"
-    make bootcycle-images SCTP_WERROR= DISABLE_HOTSPOT_OS_VERSION_CHECK=ok
+    make bootcycle-images SCTP_WERROR= DISABLE_HOTSPOT_OS_VERSION_CHECK=ok JOBS=$(echo %JOBS% | sed -e 's/-j//')
 install    : |
     # remove redundant *.diz and *.debuginfo files
     find . -iname "*.diz" -exec rm -f {} \;
     find . -iname '*.debuginfo' -exec rm {} \;
     # install jvm
-    mkdir -p %installroot%/usr
-    mkdir -p %installroot%/usr/lib64
-    make install INSTALL_PREFIX=%installroot%/usr
-    rm -rf %installroot%/usr/bin/*
-    mv %installroot%/usr/jvm/openjdk-1.8.0_101 %installroot%/usr/lib64/openjdk-8
-    rmdir %installroot%/usr/jvm
-    pushd %installroot%/usr/bin
-    for i in %installroot%/usr/lib64/openjdk-8/bin/*; do
-      ln -sf /usr/lib64/openjdk-8/bin/`basename $i` .
+    install -d -D -m 00755 $installdir/%libdir%
+    make install INSTALL_PREFIX=$installdir/usr
+    rm -rf $installdir/usr/bin/*
+    mv $installdir/usr/jvm/openjdk-1.8.0_101 $installdir/%libdir%/openjdk-8
+    rmdir $installdir/usr/jvm
+    pushd $installdir/usr/bin
+    for i in $installdir/%libdir%/openjdk-8/bin/*; do
+      ln -sf %libdir%/openjdk-8/bin/`basename $i` .
     done
     popd
-    mkdir -p %installroot%/usr/share/doc/openjdk-8
-    mkdir -p %installroot%/usr/include/openjdk-8
-    mkdir -p %installroot%/usr/share/licenses/openjdk-8
-    cp -r ./build/linux-x86_64-normal-server-release/jdk/include/* %installroot%/usr/include/openjdk-8/
+    mkdir -p $installdir/usr/share/doc/openjdk-8
+    mkdir -p $installdir/usr/include/openjdk-8
+    mkdir -p $installdir/usr/share/licenses/openjdk-8
+    cp -r ./build/linux-x86_64-normal-server-release/jdk/include/* $installdir/usr/include/openjdk-8/
     # License
-    cp LICENSE %installroot%/usr/share/licenses/openjdk-8
+    cp LICENSE $installdir/usr/share/licenses/openjdk-8
     # Man pages
     for dir in ./build/linux-x86_64-normal-server-release/images/j2re-image/man/man1/ \
                ./build/linux-x86_64-normal-server-release/images/j2sdk-image/man/man1/
     do
       pushd $dir
       for i in *.1
-        do install -D -m 644 $i %installroot%/usr/share/man/man1/$i
+        do install -D -m 644 $i $installdir/usr/share/man/man1/$i
       done
       popd
     done
     # http://icedtea.classpath.org/bugzilla/show_bug.cgi?id=1437
-    find %installroot% -iname '*.jar' -exec chmod ugo+r {} \;
+    find $installdir -iname '*.jar' -exec chmod ugo+r {} \;
