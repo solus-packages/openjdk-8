@@ -1,15 +1,15 @@
 name       : openjdk-8
-version    : 8.101
-release    : 6
+version    : 8.112
+release    : 7
 source     :
-    - http://hg.openjdk.java.net/jdk8u/jdk8u/archive/jdk8u101-b13.tar.bz2 : 4c63c8ebc31a1c54fe5b09941bf80620afde45b7942fcbe3e64bdb6aaa6e49b8
-    - https://solus-project.com/sources/java/corba-u101-b13.tar.bz2 : 04fb9f54256c9869e27930f876c18894a1656528d0ded0affeba0b4213091e3b
-    - https://solus-project.com/sources/java/hotspot-u101-b13.tar.bz2 : b099d3bcdd9e84c865fcc6f4460a8cf81ce6e83146a456ebb477755f146d252f
-    - https://solus-project.com/sources/java/jaxp-u101-b13.tar.bz2 : 3d62f0e214bc75bcd4a4ab349d9ccf27f6d518065e3331e5f46cce4bb053160a
-    - https://solus-project.com/sources/java/jaxws-u101-b13.tar.bz2 : 7ee42fac8ff36a5586046c9c52f86ccbb3d8327fd8d5a34171be27d466c8f34e
-    - https://solus-project.com/sources/java/jdk-u101-b13.tar.bz2 : 2ba88f40997d1d6cb1c98fc5b60393fbc79794db14c8bfa9a496ae94482b3139
-    - https://solus-project.com/sources/java/langtools-u101-b13.tar.bz2 : ff8cffd3eba52ac45926900c86b0a8d8fbe09e81779054ac9a7e78bf83c08d23
-    - https://solus-project.com/sources/java/nashorn-u101-b13.tar.bz2 : 3f43a76b6432c21d049dcd002b13d37cbb3b2b6f56bb7d77d0b8273e2abefad1
+    - https://solus-project.com/sources/jdk8u112.tar.xz : 84750c9c7d3db46e2ea03795b3e41b280b7ef02ff2c4e7e0aed3724e0c29eb70
+    - https://solus-project.com/sources/corba-8u112-b16.tar.xz : c91fa9d13b3da5b258a07c98ea010fcf9c86fb20f72b0aadf5b6f1654e48e50d
+    - https://solus-project.com/sources/hotspot-8u112-b16.tar.xz : aa10d8b080ccf22d46a4234fb0198be009330ed46cdca1d7030deb7779f49612
+    - https://solus-project.com/sources/jaxp-8u112-b16.tar.xz : f353004cf876c7bcd311f5e595a72c006c7b5e9c900a2be70c422adf401e5e36
+    - https://solus-project.com/sources/jaxws-8u112-b16.tar.xz : da4d3bbf29607013149c931af2fca7217c3c3fa3b23c01742b9785f7f1166eb8
+    - https://solus-project.com/sources/jdk-8u112-b16.tar.xz : 93d2ddfbd1350ba44c404a8a7bcb6927eb0324fc36d11ab4b53cdcf9a2f73d35
+    - https://solus-project.com/sources/langtools-8u112-b16.tar.xz : a9293cc42106f1804145e0066983b09e322d1a92613c5a9127f0a891f57f4f2b
+    - https://solus-project.com/sources/nashorn-8u112-b16.tar.xz : c003472f4d4e9754880add97f95b6e46802ef2d5d3d99afdb5670a8e2084122b
 license    : GPL-2.0-with-classpath-exception
 component  : programming.java
 summary    : Open implementation of Oracle's Java Development Kit
@@ -29,24 +29,24 @@ builddeps  :
     - p7zip
 setup      : |
     unset LD_AS_NEEDED
-    _SOLJVM_VERSION="u101-b13"
+    _SOLJVM_VERSION="8u112-b16"
     for subproject in corba hotspot jaxp jaxws langtools jdk nashorn; do
       mkdir -pv ${subproject} &&
-      tar -xf $sources/${subproject}-${_SOLJVM_VERSION}.tar.bz2 --strip-components=1 -C ${subproject}
+      tar -xf $sources/${subproject}-${_SOLJVM_VERSION}.tar.xz --strip-components=1 -C ${subproject}
     done
     unset _SOLJVM_VERSION
     unset JAVA_HOME
-    sh ./configure --with-update-version=101 \
-                   --with-build-number=b13 \
-                   --with-milestone=fcs \
-                   --enable-unlimited-crypto \
-                   --with-zlib=system \
-                   --with-giflib=system \
-                   --with-boot-jdk=%libdir%/openjdk-8/ \
-                   --with-cacerts-file=%libdir%/openjdk-8/jre/lib/security/cacerts \
-                   --with-extra-cflags="-std=c++98 -Wno-error -fno-delete-null-pointer-checks -fno-lifetime-dse" \
-                   --with-extra-cxxflags="-std=c++98 -fno-delete-null-pointer-checks -fno-lifetime-dse" \
-                   --with-extra-ldflags="$LDFLAGS"
+    sh ./configure --with-update-version=112 \
+        --with-build-number=b16 \
+        --with-milestone=fcs \
+        --enable-unlimited-crypto \
+        --with-zlib=system \
+        --with-giflib=system \
+        --with-boot-jdk=%libdir%/openjdk-8/ \
+        --with-cacerts-file=%libdir%/openjdk-8/jre/lib/security/cacerts \
+        --with-extra-cflags="-std=c++98 -Wno-error -fno-delete-null-pointer-checks -fno-lifetime-dse" \
+        --with-extra-cxxflags="-std=c++98 -fno-delete-null-pointer-checks -fno-lifetime-dse" \
+        --with-extra-ldflags="$LDFLAGS"
 build      : |
     unset LD_AS_NEEDED
     CFLAGS="${CFLAGS/-D_FORTIFY_SOURCE=2/}"
@@ -59,7 +59,7 @@ install    : |
     install -d -D -m 00755 $installdir/%libdir%
     make install INSTALL_PREFIX=$installdir/usr
     rm -rf $installdir/usr/bin/*
-    mv $installdir/usr/jvm/openjdk-1.8.0_101 $installdir/%libdir%/openjdk-8
+    mv $installdir/usr/jvm/openjdk-1.8.0_112 $installdir/%libdir%/openjdk-8
     rmdir $installdir/usr/jvm
     pushd $installdir/usr/bin
     for i in $installdir/%libdir%/openjdk-8/bin/*; do

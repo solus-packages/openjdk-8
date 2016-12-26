@@ -2,11 +2,11 @@
     <Source>
         <Name>openjdk-8</Name>
         <Packager>
-            <Name>Ikey Doherty</Name>
-            <Email>ikey@solus-project.com</Email>
+            <Name>Joshua Strobl</Name>
+            <Email>joshua@stroblindustries.com</Email>
         </Packager>
         <License>GPL-2.0-with-classpath-exception</License>
-        <PartOf>system.utils</PartOf>
+        <PartOf>programming.java</PartOf>
         <Summary xml:lang="en">Open implementation of Oracle&apos;s Java Development Kit</Summary>
         <Description xml:lang="en">Open implementation of Oracle&apos;s Java Development Kit
 </Description>
@@ -17,7 +17,7 @@
         <Summary xml:lang="en">Open implementation of Oracle&apos;s Java Development Kit</Summary>
         <Description xml:lang="en">Open implementation of Oracle&apos;s Java Development Kit
 </Description>
-        <PartOf>system.utils</PartOf>
+        <PartOf>programming.java</PartOf>
         <Files>
             <Path fileType="executable">/usr/bin</Path>
             <Path fileType="library">/usr/lib64/openjdk-8/ASSEMBLY_EXCEPTION</Path>
@@ -728,19 +728,19 @@
 </Description>
         <PartOf>programming.devel</PartOf>
         <RuntimeDependencies>
-            <Dependency release="5">openjdk-8</Dependency>
+            <Dependency release="7">openjdk-8</Dependency>
         </RuntimeDependencies>
         <Files>
             <Path fileType="header">/usr/include/</Path>
         </Files>
     </Package>
     <History>
-        <Update release="5">
-            <Date>2016-08-26</Date>
-            <Version>8.101</Version>
+        <Update release="7">
+            <Date>2016-11-23</Date>
+            <Version>8.112</Version>
             <Comment>Packaging update</Comment>
-            <Name>Ikey Doherty</Name>
-            <Email>ikey@solus-project.com</Email>
+            <Name>Joshua Strobl</Name>
+            <Email>joshua@stroblindustries.com</Email>
         </Update>
     </History>
 </PISI>
