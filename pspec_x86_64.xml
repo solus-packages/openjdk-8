@@ -2,8 +2,8 @@
     <Source>
         <Name>openjdk-8</Name>
         <Packager>
-            <Name>Joshua Strobl</Name>
-            <Email>joshua@stroblindustries.com</Email>
+            <Name>Bryan T. Meyers</Name>
+            <Email>bmeyers@datadrake.com</Email>
         </Packager>
         <License>GPL-2.0-with-classpath-exception</License>
         <PartOf>programming.java</PartOf>
@@ -728,19 +728,19 @@
 </Description>
         <PartOf>programming.devel</PartOf>
         <RuntimeDependencies>
-            <Dependency release="7">openjdk-8</Dependency>
+            <Dependency release="8">openjdk-8</Dependency>
         </RuntimeDependencies>
         <Files>
             <Path fileType="header">/usr/include/</Path>
         </Files>
     </Package>
     <History>
-        <Update release="7">
-            <Date>2016-11-23</Date>
+        <Update release="8">
+            <Date>2016-12-26</Date>
             <Version>8.112</Version>
             <Comment>Packaging update</Comment>
-            <Name>Joshua Strobl</Name>
-            <Email>joshua@stroblindustries.com</Email>
+            <Name>Bryan T. Meyers</Name>
+            <Email>bmeyers@datadrake.com</Email>
         </Update>
     </History>
 </PISI>
