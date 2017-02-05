@@ -1,6 +1,6 @@
 name       : openjdk-8
 version    : 8.112
-release    : 8
+release    : 9
 source     :
     - https://solus-project.com/sources/jdk8u112.tar.xz : 84750c9c7d3db46e2ea03795b3e41b280b7ef02ff2c4e7e0aed3724e0c29eb70
     - https://solus-project.com/sources/corba-8u112-b16.tar.xz : c91fa9d13b3da5b258a07c98ea010fcf9c86fb20f72b0aadf5b6f1654e48e50d
@@ -84,3 +84,5 @@ install    : |
     done
     # http://icedtea.classpath.org/bugzilla/show_bug.cgi?id=1437
     find $installdir -iname '*.jar' -exec chmod ugo+r {} \;
+
+    install -D -m 00644 $pkgfiles/java-jar.desktop $installdir/usr/share/applications/java-jar.desktop
