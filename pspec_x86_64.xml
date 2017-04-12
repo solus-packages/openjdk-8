@@ -389,6 +389,7 @@
             <Path fileType="library">/usr/lib64/openjdk-8/jre/lib/amd64/libjpeg.so</Path>
             <Path fileType="library">/usr/lib64/openjdk-8/jre/lib/amd64/libjsdt.diz</Path>
             <Path fileType="library">/usr/lib64/openjdk-8/jre/lib/amd64/libjsdt.so</Path>
+            <Path fileType="library">/usr/lib64/openjdk-8/jre/lib/amd64/libjsig.diz</Path>
             <Path fileType="library">/usr/lib64/openjdk-8/jre/lib/amd64/libjsig.so</Path>
             <Path fileType="library">/usr/lib64/openjdk-8/jre/lib/amd64/libjsound.diz</Path>
             <Path fileType="library">/usr/lib64/openjdk-8/jre/lib/amd64/libjsound.so</Path>
@@ -406,6 +407,7 @@
             <Path fileType="library">/usr/lib64/openjdk-8/jre/lib/amd64/libnio.so</Path>
             <Path fileType="library">/usr/lib64/openjdk-8/jre/lib/amd64/libnpt.diz</Path>
             <Path fileType="library">/usr/lib64/openjdk-8/jre/lib/amd64/libnpt.so</Path>
+            <Path fileType="library">/usr/lib64/openjdk-8/jre/lib/amd64/libsaproc.diz</Path>
             <Path fileType="library">/usr/lib64/openjdk-8/jre/lib/amd64/libsaproc.so</Path>
             <Path fileType="library">/usr/lib64/openjdk-8/jre/lib/amd64/libsctp.diz</Path>
             <Path fileType="library">/usr/lib64/openjdk-8/jre/lib/amd64/libsctp.so</Path>
@@ -420,7 +422,9 @@
             <Path fileType="library">/usr/lib64/openjdk-8/jre/lib/amd64/libzip.diz</Path>
             <Path fileType="library">/usr/lib64/openjdk-8/jre/lib/amd64/libzip.so</Path>
             <Path fileType="library">/usr/lib64/openjdk-8/jre/lib/amd64/server/Xusage.txt</Path>
+            <Path fileType="library">/usr/lib64/openjdk-8/jre/lib/amd64/server/libjsig.diz</Path>
             <Path fileType="library">/usr/lib64/openjdk-8/jre/lib/amd64/server/libjsig.so</Path>
+            <Path fileType="library">/usr/lib64/openjdk-8/jre/lib/amd64/server/libjvm.diz</Path>
             <Path fileType="library">/usr/lib64/openjdk-8/jre/lib/amd64/server/libjvm.so</Path>
             <Path fileType="library">/usr/lib64/openjdk-8/jre/lib/applet</Path>
             <Path fileType="library">/usr/lib64/openjdk-8/jre/lib/calendars.properties</Path>
@@ -718,7 +722,6 @@
             <Path fileType="library">/usr/lib64/openjdk-8/src.zip</Path>
             <Path fileType="data">/usr/share/applications/java-jar.desktop</Path>
             <Path fileType="doc">/usr/share/doc</Path>
-            <Path fileType="data">/usr/share/licenses/openjdk-8/LICENSE</Path>
             <Path fileType="man">/usr/share/man</Path>
         </Files>
     </Package>
@@ -729,16 +732,16 @@
 </Description>
         <PartOf>programming.devel</PartOf>
         <RuntimeDependencies>
-            <Dependency release="9">openjdk-8</Dependency>
+            <Dependency release="10">openjdk-8</Dependency>
         </RuntimeDependencies>
         <Files>
             <Path fileType="header">/usr/include/</Path>
         </Files>
     </Package>
     <History>
-        <Update release="9">
-            <Date>2017-02-05</Date>
-            <Version>8.112</Version>
+        <Update release="10">
+            <Date>2017-04-12</Date>
+            <Version>8.121</Version>
             <Comment>Packaging update</Comment>
             <Name>Ikey Doherty</Name>
             <Email>ikey@solus-project.com</Email>

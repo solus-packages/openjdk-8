@@ -1,15 +1,15 @@
 name       : openjdk-8
-version    : 8.112
-release    : 9
+version    : 8.121
+release    : 10
 source     :
-    - https://solus-project.com/sources/jdk8u112.tar.xz : 84750c9c7d3db46e2ea03795b3e41b280b7ef02ff2c4e7e0aed3724e0c29eb70
-    - https://solus-project.com/sources/corba-8u112-b16.tar.xz : c91fa9d13b3da5b258a07c98ea010fcf9c86fb20f72b0aadf5b6f1654e48e50d
-    - https://solus-project.com/sources/hotspot-8u112-b16.tar.xz : aa10d8b080ccf22d46a4234fb0198be009330ed46cdca1d7030deb7779f49612
-    - https://solus-project.com/sources/jaxp-8u112-b16.tar.xz : f353004cf876c7bcd311f5e595a72c006c7b5e9c900a2be70c422adf401e5e36
-    - https://solus-project.com/sources/jaxws-8u112-b16.tar.xz : da4d3bbf29607013149c931af2fca7217c3c3fa3b23c01742b9785f7f1166eb8
-    - https://solus-project.com/sources/jdk-8u112-b16.tar.xz : 93d2ddfbd1350ba44c404a8a7bcb6927eb0324fc36d11ab4b53cdcf9a2f73d35
-    - https://solus-project.com/sources/langtools-8u112-b16.tar.xz : a9293cc42106f1804145e0066983b09e322d1a92613c5a9127f0a891f57f4f2b
-    - https://solus-project.com/sources/nashorn-8u112-b16.tar.xz : c003472f4d4e9754880add97f95b6e46802ef2d5d3d99afdb5670a8e2084122b
+    - https://solus-project.com/sources/java/jdk8u121-b13.tar.bz2 : 1e681ea5db9feec8ed65acef5b60555dddd8297143b3858e0e3f148f1772dc0d
+    - https://solus-project.com/sources/java/corba-u121-b13.tar.bz2 : f16d867815ff7476887e11716a0f5daf5a63a78b12350826ac68cd33534cc702
+    - https://solus-project.com/sources/java/hotspot-u121-b13.tar.bz2 : cfa12235b51b9e6dc74406c53022830fc43cf42fc25e673707382eb78ffe498b
+    - https://solus-project.com/sources/java/jaxp-u121-b13.tar.bz2 : 19729f547b7a5fdd12825d42da74015e33043e1e10acf5326102032cccee7382
+    - https://solus-project.com/sources/java/jaxws-u121-b13.tar.bz2 : e9c659171e65cc6ff8515ff933c9729d4ee8f70193ec29f90f0b2e71fe4e7e57
+    - https://solus-project.com/sources/java/jdk-u121-b13.tar.bz2 : 5c654821a7561dceb9c8be1df0b541358eda5a79144911ba0e1806a1a037bd46
+    - https://solus-project.com/sources/java/langtools-u121-b13.tar.bz2 : 56d7903ea7cf5491d92e261e173b9bf2f44c1bdc6f3786c0830c32550422e9f7
+    - https://solus-project.com/sources/java/nashorn-u121-b13.tar.bz2 : 9dc965c18feed932ed5c37f946880bd7135c8942a1df31a0d8ae49d75127100c
 license    : GPL-2.0-with-classpath-exception
 component  : programming.java
 summary    : Open implementation of Oracle's Java Development Kit
@@ -28,61 +28,61 @@ builddeps  :
     - pkgconfig(xtst)
     - p7zip
 setup      : |
+    # Prep input tarballs
     unset LD_AS_NEEDED
-    _SOLJVM_VERSION="8u112-b16"
-    for subproject in corba hotspot jaxp jaxws langtools jdk nashorn; do
-      mkdir -pv ${subproject} &&
-      tar -xf $sources/${subproject}-${_SOLJVM_VERSION}.tar.xz --strip-components=1 -C ${subproject}
+    _SOLJVM_VERSION="u121-b13"
+    for tarball in corba hotspot jaxp jaxws langtools jdk nashorn; do
+        mkdir -pv ${tarball} &&
+        tar -xf $sources/${tarball}-${_SOLJVM_VERSION}.tar.bz2 --strip-components=1 -C ${tarball}
     done
     unset _SOLJVM_VERSION
     unset JAVA_HOME
-    sh ./configure --with-update-version=112 \
-        --with-build-number=b16 \
-        --with-milestone=fcs \
-        --enable-unlimited-crypto \
+    
+    # Now configure
+    export SANEFLAGS="-std=c++98 -Wno-error -fno-delete-null-pointer-checks -fno-lifetime-dse"
+    bash ./configure --prefix="$installdir/usr" \
+        --with-update-version=121 \
+        --with-build-number=b13 \
+        --with-milestone=solus \
         --with-zlib=system \
         --with-giflib=system \
-        --with-boot-jdk=%libdir%/openjdk-8/ \
+        --enable-unlimited-crypto \
         --with-cacerts-file=%libdir%/openjdk-8/jre/lib/security/cacerts \
-        --with-extra-cflags="-std=c++98 -Wno-error -fno-delete-null-pointer-checks -fno-lifetime-dse" \
-        --with-extra-cxxflags="-std=c++98 -fno-delete-null-pointer-checks -fno-lifetime-dse" \
+        --with-jobs=%YJOBS% \
+        --with-extra-cflags="$CFLAGS $SANEFLAGS" \
+        --with-extra-cxxflags="$CXXFLAGS $SANEFLAGS" \
         --with-extra-ldflags="$LDFLAGS"
 build      : |
     unset LD_AS_NEEDED
-    CFLAGS="${CFLAGS/-D_FORTIFY_SOURCE=2/}"
-    make bootcycle-images SCTP_WERROR= DISABLE_HOTSPOT_OS_VERSION_CHECK=ok JOBS=$(echo %JOBS% | sed -e 's/-j//')
+    make SCTP_WERROR= DISABLE_HOTSPOT_OS_VERSION_CHECK=ok all WARNINGS_ARE_ERRORS=
 install    : |
-    # remove redundant *.diz and *.debuginfo files
-    find . -iname "*.diz" -exec rm -f {} \;
-    find . -iname '*.debuginfo' -exec rm {} \;
-    # install jvm
     install -d -D -m 00755 $installdir/%libdir%
-    make install INSTALL_PREFIX=$installdir/usr
+    make install
+    
+    # Binaries
     rm -rf $installdir/usr/bin/*
-    mv $installdir/usr/jvm/openjdk-1.8.0_112 $installdir/%libdir%/openjdk-8
+    mv $installdir/usr/jvm/openjdk-1.8.0_121-solus $installdir/%libdir%/openjdk-8
     rmdir $installdir/usr/jvm
     pushd $installdir/usr/bin
     for i in $installdir/%libdir%/openjdk-8/bin/*; do
       ln -sf %libdir%/openjdk-8/bin/`basename $i` .
     done
     popd
-    mkdir -p $installdir/usr/share/doc/openjdk-8
-    mkdir -p $installdir/usr/include/openjdk-8
-    mkdir -p $installdir/usr/share/licenses/openjdk-8
-    cp -r ./build/linux-x86_64-normal-server-release/jdk/include/* $installdir/usr/include/openjdk-8/
-    # License
-    cp LICENSE $installdir/usr/share/licenses/openjdk-8
-    # Man pages
-    for dir in ./build/linux-x86_64-normal-server-release/images/j2re-image/man/man1/ \
-               ./build/linux-x86_64-normal-server-release/images/j2sdk-image/man/man1/
-    do
-      pushd $dir
-      for i in *.1
-        do install -D -m 644 $i $installdir/usr/share/man/man1/$i
-      done
-      popd
-    done
-    # http://icedtea.classpath.org/bugzilla/show_bug.cgi?id=1437
-    find $installdir -iname '*.jar' -exec chmod ugo+r {} \;
+    
+    # Docs
+    install -m 00644 -D LICENSE $installdir/usr/share/doc/openjdk-8/LICENSE
 
+    # Move into build dir
+    pushd build/linux-x86_64-normal-server-release
+
+    # Chuck the headers in
+    install -D -d -m 00755 $installdir/usr/include/openjdk-8
+    cp -ra jdk/include/* $installdir/usr/include/openjdk-8/.
+
+    # Sort out the manpages
+    install -D -d -m 00755 $installdir/usr/share/man/man1
+    install -m 00644 images/j2re-image/man/man1/*.1 $installdir/usr/share/man/man1/.
+    install -m 00644 images/j2sdk-image/man/man1/*.1 $installdir/usr/share/man/man1/.
+    
+    # Add java-jar.desktop into usable apps
     install -D -m 00644 $pkgfiles/java-jar.desktop $installdir/usr/share/applications/java-jar.desktop
