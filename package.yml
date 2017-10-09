@@ -1,15 +1,15 @@
 name       : openjdk-8
-version    : 8.144
-release    : 11
+version    : 8.162
+release    : 12
 source     :
-    - https://solus-project.com/sources/java/jdk8u144-b01.tar.bz2 : f88a87d071f1cf25cdeb3972e4eacc74b8311d80ce4bee5014690697ed0983ce
-    - https://solus-project.com/sources/java/corba-u144-b01.tar.bz2 : d7ccde95631ef67611f5b1e4a19cc0f6817f1eac28e7f2266e92cbd340d60aab
-    - https://solus-project.com/sources/java/hotspot-u144-b01.tar.bz2 : 5ce021dea006a04c27f8f63bb53b4c1fae55b513607e5ea6e192125be9350e56
-    - https://solus-project.com/sources/java/jaxp-u144-b01.tar.bz2 : bd95c17def2ca056f275ea25413eb7372f98e5c647f2834e0a6aa0b90bd8908c
-    - https://solus-project.com/sources/java/jaxws-u144-b01.tar.bz2 : a17804bbd21e94b1970b39f2f4bdfadd03d93fbbee8d6284161ff795c31f6667
-    - https://solus-project.com/sources/java/jdk-u144-b01.tar.bz2 : fc747e1d1087ca4d5f905be436e91418396d48c03be438386112017def51a15d
-    - https://solus-project.com/sources/java/langtools-u144-b01.tar.bz2 : 39642dd94fbd8860fcbad1fa1372bc45fd2d6de00554025b410f02da814b0d57
-    - https://solus-project.com/sources/java/nashorn-u144-b01.tar.bz2 : 27d726d1813ba386d179f90b4df7e02b2423b641115003099da214da9a8b0356
+    - https://solus-project.com/sources/java/jdk8u162-b01.tar.bz2 : 0ac924d7b8b6459cac6a94f2bb4cc81b2441828b70179399fe616425f1f81ee4
+    - https://solus-project.com/sources/java/corba-u162-b01.tar.bz2 : 661be9bb06a10d02a8f6ef38da13ebd2e481a43f2989bdf3f0267dc29873f1cd
+    - https://solus-project.com/sources/java/hotspot-u162-b01.tar.bz2 : d43242a032eba7dc74d73cbe49b06a1d10177d35ea2eb127372aebb16cdce902
+    - https://solus-project.com/sources/java/jaxp-u162-b01.tar.bz2 : 555fd4a1245b8ad686738cd4b5e4be772d0fe1aaaeb2b6cf01a27c001f03d34b
+    - https://solus-project.com/sources/java/jaxws-u162-b01.tar.bz2 : 545340b42cf5a6da0e518412e05e664ca0e39e30f3b9e1e3f8bf6010be89ceec
+    - https://solus-project.com/sources/java/jdk-u162-b01.tar.bz2 : 4655f9f0016f4dd6155d0ccc451cce4fa9709649bac4d85e7180cffeac4cacb7
+    - https://solus-project.com/sources/java/langtools-u162-b01.tar.bz2 : 704beb0b8e0f35f0905d8cfda542ebb185a0531b01577108d8efdbc2794f5477
+    - https://solus-project.com/sources/java/nashorn-u162-b01.tar.bz2 : 5574450699bcd82c2427bc8bb244cec8bd2581c147886dbc9e2db1d91758caed
 license    : GPL-2.0-with-classpath-exception
 component  : programming.java
 summary    : Open implementation of Oracle's Java Development Kit
@@ -30,7 +30,7 @@ builddeps  :
 setup      : |
     # Prep input tarballs
     unset LD_AS_NEEDED
-    _SOLJVM_VERSION="u144-b01"
+    _SOLJVM_VERSION="u162-b01"
     for tarball in corba hotspot jaxp jaxws langtools jdk nashorn; do
         mkdir -pv ${tarball} &&
         tar -xf $sources/${tarball}-${_SOLJVM_VERSION}.tar.bz2 --strip-components=1 -C ${tarball}
@@ -41,7 +41,7 @@ setup      : |
     # Now configure
     export SANEFLAGS="-std=c++98 -Wno-error -fno-delete-null-pointer-checks -fno-lifetime-dse"
     bash ./configure --prefix="$installdir/usr" \
-        --with-update-version=144 \
+        --with-update-version=162 \
         --with-build-number=b01 \
         --with-milestone=solus \
         --with-zlib=system \
@@ -61,7 +61,7 @@ install    : |
     
     # Binaries
     rm -rf $installdir/usr/bin/*
-    mv $installdir/usr/jvm/openjdk-1.8.0_144-solus $installdir/%libdir%/openjdk-8
+    mv $installdir/usr/jvm/openjdk-1.8.0_162-solus $installdir/%libdir%/openjdk-8
     rmdir $installdir/usr/jvm
     pushd $installdir/usr/bin
     for i in $installdir/%libdir%/openjdk-8/bin/*; do
