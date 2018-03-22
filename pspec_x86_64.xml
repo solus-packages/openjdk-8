@@ -2,8 +2,8 @@
     <Source>
         <Name>openjdk-8</Name>
         <Packager>
-            <Name>Ikey Doherty</Name>
-            <Email>ikey@solus-project.com</Email>
+            <Name>Pierre-Yves</Name>
+            <Email>pyu@riseup.net</Email>
         </Packager>
         <License>GPL-2.0-with-classpath-exception</License>
         <PartOf>programming.java</PartOf>
@@ -734,19 +734,19 @@
 </Description>
         <PartOf>programming.devel</PartOf>
         <RuntimeDependencies>
-            <Dependency release="13">openjdk-8</Dependency>
+            <Dependency release="14">openjdk-8</Dependency>
         </RuntimeDependencies>
         <Files>
             <Path fileType="header">/usr/include/</Path>
         </Files>
     </Package>
     <History>
-        <Update release="13">
-            <Date>2017-12-01</Date>
+        <Update release="14">
+            <Date>2018-03-19</Date>
             <Version>8.172</Version>
             <Comment>Packaging update</Comment>
-            <Name>Ikey Doherty</Name>
-            <Email>ikey@solus-project.com</Email>
+            <Name>Pierre-Yves</Name>
+            <Email>pyu@riseup.net</Email>
         </Update>
     </History>
 </PISI>

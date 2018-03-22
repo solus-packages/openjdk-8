@@ -1,6 +1,6 @@
 name       : openjdk-8
 version    : 8.172
-release    : 13
+release    : 14
 source     :
     - https://solus-project.com/sources/java/jdk8u172-b00.tar.bz2 : 2a7305fa45b7f2e59200905f723f7a00a6aad84bb30b2a109b15337b96ad2762
     - https://solus-project.com/sources/java/corba-u172-b00.tar.bz2 : 79813d92d10b267c59bc67910ddeb8995a5ec19dfc67bc01384f261f7e4cfa17
@@ -37,7 +37,7 @@ setup      : |
     done
     unset _SOLJVM_VERSION
     unset JAVA_HOME
-    
+
     # Now configure
     export SANEFLAGS="-std=c++98 -Wno-error -fno-delete-null-pointer-checks -fno-lifetime-dse"
     bash ./configure --prefix="$installdir/usr" \
@@ -58,7 +58,7 @@ build      : |
 install    : |
     install -d -D -m 00755 $installdir/%libdir%
     make install
-    
+
     # Binaries
     rm -rf $installdir/usr/bin/*
     mv $installdir/usr/jvm/openjdk-1.8.0_172-solus $installdir/%libdir%/openjdk-8
@@ -68,7 +68,7 @@ install    : |
       ln -sf %libdir%/openjdk-8/bin/`basename $i` .
     done
     popd
-    
+
     # Docs
     install -m 00644 -D LICENSE $installdir/usr/share/doc/openjdk-8/LICENSE
 
@@ -83,6 +83,6 @@ install    : |
     install -D -d -m 00755 $installdir/usr/share/man/man1
     install -m 00644 images/j2re-image/man/man1/*.1 $installdir/usr/share/man/man1/.
     install -m 00644 images/j2sdk-image/man/man1/*.1 $installdir/usr/share/man/man1/.
-    
+
     # Add java-jar.desktop into usable apps
     install -D -m 00644 $pkgfiles/java-jar.desktop $installdir/usr/share/applications/java-jar.desktop
