@@ -1,6 +1,6 @@
 #!/bin/bash
-VERSION="172"
-REVISION="b00"
+VERSION="192"
+REVISION="b26"
 BASEURI="http://hg.openjdk.java.net/jdk8u/jdk8u/archive"
 set -e
 

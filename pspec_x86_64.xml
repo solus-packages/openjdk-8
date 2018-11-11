@@ -2,8 +2,8 @@
     <Source>
         <Name>openjdk-8</Name>
         <Packager>
-            <Name>Pierre-Yves</Name>
-            <Email>pyu@riseup.net</Email>
+            <Name>Philipp Trulson</Name>
+            <Email>philipp@trulson.de</Email>
         </Packager>
         <License>GPL-2.0-with-classpath-exception</License>
         <PartOf>programming.java</PartOf>
@@ -19,7 +19,47 @@
 </Description>
         <PartOf>programming.java</PartOf>
         <Files>
-            <Path fileType="executable">/usr/bin</Path>
+            <Path fileType="executable">/usr/bin/appletviewer</Path>
+            <Path fileType="executable">/usr/bin/extcheck</Path>
+            <Path fileType="executable">/usr/bin/idlj</Path>
+            <Path fileType="executable">/usr/bin/jar</Path>
+            <Path fileType="executable">/usr/bin/jarsigner</Path>
+            <Path fileType="executable">/usr/bin/java</Path>
+            <Path fileType="executable">/usr/bin/java-rmi.cgi</Path>
+            <Path fileType="executable">/usr/bin/javac</Path>
+            <Path fileType="executable">/usr/bin/javadoc</Path>
+            <Path fileType="executable">/usr/bin/javah</Path>
+            <Path fileType="executable">/usr/bin/javap</Path>
+            <Path fileType="executable">/usr/bin/jcmd</Path>
+            <Path fileType="executable">/usr/bin/jconsole</Path>
+            <Path fileType="executable">/usr/bin/jdb</Path>
+            <Path fileType="executable">/usr/bin/jdeps</Path>
+            <Path fileType="executable">/usr/bin/jhat</Path>
+            <Path fileType="executable">/usr/bin/jinfo</Path>
+            <Path fileType="executable">/usr/bin/jjs</Path>
+            <Path fileType="executable">/usr/bin/jmap</Path>
+            <Path fileType="executable">/usr/bin/jps</Path>
+            <Path fileType="executable">/usr/bin/jrunscript</Path>
+            <Path fileType="executable">/usr/bin/jsadebugd</Path>
+            <Path fileType="executable">/usr/bin/jstack</Path>
+            <Path fileType="executable">/usr/bin/jstat</Path>
+            <Path fileType="executable">/usr/bin/jstatd</Path>
+            <Path fileType="executable">/usr/bin/keytool</Path>
+            <Path fileType="executable">/usr/bin/native2ascii</Path>
+            <Path fileType="executable">/usr/bin/orbd</Path>
+            <Path fileType="executable">/usr/bin/pack200</Path>
+            <Path fileType="executable">/usr/bin/policytool</Path>
+            <Path fileType="executable">/usr/bin/rmic</Path>
+            <Path fileType="executable">/usr/bin/rmid</Path>
+            <Path fileType="executable">/usr/bin/rmiregistry</Path>
+            <Path fileType="executable">/usr/bin/schemagen</Path>
+            <Path fileType="executable">/usr/bin/serialver</Path>
+            <Path fileType="executable">/usr/bin/servertool</Path>
+            <Path fileType="executable">/usr/bin/tnameserv</Path>
+            <Path fileType="executable">/usr/bin/unpack200</Path>
+            <Path fileType="executable">/usr/bin/wsgen</Path>
+            <Path fileType="executable">/usr/bin/wsimport</Path>
+            <Path fileType="executable">/usr/bin/xjc</Path>
             <Path fileType="library">/usr/lib64/openjdk-8/ASSEMBLY_EXCEPTION</Path>
             <Path fileType="library">/usr/lib64/openjdk-8/LICENSE</Path>
             <Path fileType="library">/usr/lib64/openjdk-8/THIRD_PARTY_README</Path>
@@ -723,8 +763,47 @@
             <Path fileType="library">/usr/lib64/openjdk-8/sample/try-with-resources/src/ZipCat.java</Path>
             <Path fileType="library">/usr/lib64/openjdk-8/src.zip</Path>
             <Path fileType="data">/usr/share/applications/java-jar.desktop</Path>
-            <Path fileType="doc">/usr/share/doc</Path>
-            <Path fileType="man">/usr/share/man</Path>
+            <Path fileType="doc">/usr/share/doc/openjdk-8/LICENSE</Path>
+            <Path fileType="man">/usr/share/man/man1/appletviewer.1</Path>
+            <Path fileType="man">/usr/share/man/man1/extcheck.1</Path>
+            <Path fileType="man">/usr/share/man/man1/idlj.1</Path>
+            <Path fileType="man">/usr/share/man/man1/jar.1</Path>
+            <Path fileType="man">/usr/share/man/man1/jarsigner.1</Path>
+            <Path fileType="man">/usr/share/man/man1/java.1</Path>
+            <Path fileType="man">/usr/share/man/man1/javac.1</Path>
+            <Path fileType="man">/usr/share/man/man1/javadoc.1</Path>
+            <Path fileType="man">/usr/share/man/man1/javah.1</Path>
+            <Path fileType="man">/usr/share/man/man1/javap.1</Path>
+            <Path fileType="man">/usr/share/man/man1/jcmd.1</Path>
+            <Path fileType="man">/usr/share/man/man1/jconsole.1</Path>
+            <Path fileType="man">/usr/share/man/man1/jdb.1</Path>
+            <Path fileType="man">/usr/share/man/man1/jdeps.1</Path>
+            <Path fileType="man">/usr/share/man/man1/jhat.1</Path>
+            <Path fileType="man">/usr/share/man/man1/jinfo.1</Path>
+            <Path fileType="man">/usr/share/man/man1/jjs.1</Path>
+            <Path fileType="man">/usr/share/man/man1/jmap.1</Path>
+            <Path fileType="man">/usr/share/man/man1/jps.1</Path>
+            <Path fileType="man">/usr/share/man/man1/jrunscript.1</Path>
+            <Path fileType="man">/usr/share/man/man1/jsadebugd.1</Path>
+            <Path fileType="man">/usr/share/man/man1/jstack.1</Path>
+            <Path fileType="man">/usr/share/man/man1/jstat.1</Path>
+            <Path fileType="man">/usr/share/man/man1/jstatd.1</Path>
+            <Path fileType="man">/usr/share/man/man1/keytool.1</Path>
+            <Path fileType="man">/usr/share/man/man1/native2ascii.1</Path>
+            <Path fileType="man">/usr/share/man/man1/orbd.1</Path>
+            <Path fileType="man">/usr/share/man/man1/pack200.1</Path>
+            <Path fileType="man">/usr/share/man/man1/policytool.1</Path>
+            <Path fileType="man">/usr/share/man/man1/rmic.1</Path>
+            <Path fileType="man">/usr/share/man/man1/rmid.1</Path>
+            <Path fileType="man">/usr/share/man/man1/rmiregistry.1</Path>
+            <Path fileType="man">/usr/share/man/man1/schemagen.1</Path>
+            <Path fileType="man">/usr/share/man/man1/serialver.1</Path>
+            <Path fileType="man">/usr/share/man/man1/servertool.1</Path>
+            <Path fileType="man">/usr/share/man/man1/tnameserv.1</Path>
+            <Path fileType="man">/usr/share/man/man1/unpack200.1</Path>
+            <Path fileType="man">/usr/share/man/man1/wsgen.1</Path>
+            <Path fileType="man">/usr/share/man/man1/wsimport.1</Path>
+            <Path fileType="man">/usr/share/man/man1/xjc.1</Path>
         </Files>
     </Package>
     <Package>
@@ -734,19 +813,26 @@
 </Description>
         <PartOf>programming.devel</PartOf>
         <RuntimeDependencies>
-            <Dependency release="14">openjdk-8</Dependency>
+            <Dependency release="15">openjdk-8</Dependency>
         </RuntimeDependencies>
         <Files>
-            <Path fileType="header">/usr/include/</Path>
+            <Path fileType="header">/usr/include/openjdk-8/classfile_constants.h</Path>
+            <Path fileType="header">/usr/include/openjdk-8/jawt.h</Path>
+            <Path fileType="header">/usr/include/openjdk-8/jdwpTransport.h</Path>
+            <Path fileType="header">/usr/include/openjdk-8/jni.h</Path>
+            <Path fileType="header">/usr/include/openjdk-8/jvmti.h</Path>
+            <Path fileType="header">/usr/include/openjdk-8/jvmticmlr.h</Path>
+            <Path fileType="header">/usr/include/openjdk-8/linux/jawt_md.h</Path>
+            <Path fileType="header">/usr/include/openjdk-8/linux/jni_md.h</Path>
         </Files>
     </Package>
     <History>
-        <Update release="14">
-            <Date>2018-03-19</Date>
-            <Version>8.172</Version>
+        <Update release="15">
+            <Date>2018-10-23</Date>
+            <Version>8.192</Version>
             <Comment>Packaging update</Comment>
-            <Name>Pierre-Yves</Name>
-            <Email>pyu@riseup.net</Email>
+            <Name>Philipp Trulson</Name>
+            <Email>philipp@trulson.de</Email>
         </Update>
     </History>
 </PISI>
