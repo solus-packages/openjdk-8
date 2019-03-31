@@ -1,6 +1,6 @@
 name       : openjdk-8
 version    : 8.192
-release    : 15
+release    : 16
 source     :
     - https://getsol.us/sources/java/jdk8u192-b26.tar.bz2 : a8044863dad4d09a781a050a150868e7a2cc668da14069f80baed4b6bf88c839
     - https://getsol.us/sources/java/corba-u192-b26.tar.bz2 : cf75e3fda1e79a440605eb14b01aa13a6362a33adc6d2dace0eb19e4f71f2c02
