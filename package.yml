@@ -1,15 +1,15 @@
 name       : openjdk-8
-version    : 8.192
-release    : 16
+version    : 8.232
+release    : 17
 source     :
-    - https://getsol.us/sources/java/jdk8u192-b26.tar.bz2 : a8044863dad4d09a781a050a150868e7a2cc668da14069f80baed4b6bf88c839
-    - https://getsol.us/sources/java/corba-u192-b26.tar.bz2 : cf75e3fda1e79a440605eb14b01aa13a6362a33adc6d2dace0eb19e4f71f2c02
-    - https://getsol.us/sources/java/hotspot-u192-b26.tar.bz2 : 45da910ef41f3ead10e11e198799e23f55e1504db9afa6325f0164cf2856ef46
-    - https://getsol.us/sources/java/jaxp-u192-b26.tar.bz2 : 168ebfd31d955afcf3984357b3b2cd8c3b7969ad343ce2e11a3eae12b1e16d22
-    - https://getsol.us/sources/java/jaxws-u192-b26.tar.bz2 : ef6767a0b2052f5ceb9fd568b9da4f7bf980242e063d218bcb829db0be3ba111
-    - https://getsol.us/sources/java/jdk-u192-b26.tar.bz2 : fdc8a74348d3c57f7b83532a4e67050316de83fdea648941f1c98a31305d0408
-    - https://getsol.us/sources/java/langtools-u192-b26.tar.bz2 : a7dc02bca7f24eb31391457491babaaf5f1328a8690b55bfe2cc06fd59fd8531
-    - https://getsol.us/sources/java/nashorn-u192-b26.tar.bz2 : a35d84c9fe6bb218cef65c85ef5431ae1b3d5b944ea55ae83724230d3cc113db
+    - https://getsol.us/sources/java/jdk8u232-ga.tar.bz2 : 23abb7e548611b19fc24802165d27d217657d6648b4688573a0430168e86ea77
+    - https://getsol.us/sources/java/corba-u232-ga.tar.bz2 : 9958a19a9064a18e4cf249734ff1c03ad30444bff277d560027d02b8be5c3a68
+    - https://getsol.us/sources/java/hotspot-u232-ga.tar.bz2 : ed88a5db0e9d1f81ff966e18940e1d7d9a3256aa324b396eb0e097893291d537
+    - https://getsol.us/sources/java/jaxp-u232-ga.tar.bz2 : 4b402bc08e642acb2b42833996e70b284a1a02c70d4cc96ac4ece1802daeb892
+    - https://getsol.us/sources/java/jaxws-u232-ga.tar.bz2 : 70276b4e04ec0d3f0d936f541ff27ee4e28602f28dfab7208b44a95ffa2f1a24
+    - https://getsol.us/sources/java/jdk-u232-ga.tar.bz2 : 4c51f8063382065ea4440c4ed37695408401a0aead314a1d185d4fc4b2c36b6f
+    - https://getsol.us/sources/java/langtools-u232-ga.tar.bz2 : bb8b55208e72ee59dd27ca033563f312ba5608685845efdf2882ce3eafcde1c3
+    - https://getsol.us/sources/java/nashorn-u232-ga.tar.bz2 : 65401a6f11f67c198b54846fd8e28d452ffcb95939943c432f27e01d01fde29a
 license    : GPL-2.0-with-classpath-exception
 component  : programming.java
 summary    : Open implementation of Oracle's Java Development Kit
@@ -30,7 +30,7 @@ builddeps  :
 setup      : |
     # Prep input tarballs
     unset LD_AS_NEEDED
-    _SOLJVM_VERSION="u192-b26"
+    _SOLJVM_VERSION="u232-ga"
     for tarball in corba hotspot jaxp jaxws langtools jdk nashorn; do
         mkdir -pv ${tarball} &&
         tar -xf $sources/${tarball}-${_SOLJVM_VERSION}.tar.bz2 --strip-components=1 -C ${tarball}
@@ -41,8 +41,8 @@ setup      : |
     # Now configure
     export SANEFLAGS="-std=c++98 -Wno-error -fno-delete-null-pointer-checks -fno-lifetime-dse"
     bash ./configure --prefix="$installdir/usr" \
-        --with-update-version=192 \
-        --with-build-number=b26 \
+        --with-update-version=232 \
+        --with-build-number=ga \
         --with-milestone=solus \
         --with-zlib=system \
         --with-giflib=system \
@@ -61,7 +61,7 @@ install    : |
 
     # Binaries
     rm -rf $installdir/usr/bin/*
-    mv $installdir/usr/jvm/openjdk-1.8.0_192-solus $installdir/%libdir%/openjdk-8
+    mv $installdir/usr/jvm/openjdk-1.8.0_232-solus $installdir/%libdir%/openjdk-8
     rmdir $installdir/usr/jvm
     pushd $installdir/usr/bin
     for i in $installdir/%libdir%/openjdk-8/bin/*; do
