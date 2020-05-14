@@ -1,6 +1,6 @@
 name       : openjdk-8
 version    : 8.232
-release    : 17
+release    : 18
 source     :
     - https://getsol.us/sources/java/jdk8u232-ga.tar.bz2 : 23abb7e548611b19fc24802165d27d217657d6648b4688573a0430168e86ea77
     - https://getsol.us/sources/java/corba-u232-ga.tar.bz2 : 9958a19a9064a18e4cf249734ff1c03ad30444bff277d560027d02b8be5c3a68
@@ -27,19 +27,18 @@ builddeps  :
     - pkgconfig(xt)
     - pkgconfig(xtst)
     - p7zip
+patterns   :
+    - devel: /usr/lib64/openjdk-8/include 
 setup      : |
     # Prep input tarballs
-    unset LD_AS_NEEDED
-    _SOLJVM_VERSION="u232-ga"
+    SOLJVM_VERSION="u232-ga"
     for tarball in corba hotspot jaxp jaxws langtools jdk nashorn; do
         mkdir -pv ${tarball} &&
-        tar -xf $sources/${tarball}-${_SOLJVM_VERSION}.tar.bz2 --strip-components=1 -C ${tarball}
+        tar -xf $sources/${tarball}-${SOLJVM_VERSION}.tar.bz2 --strip-components=1 -C ${tarball}
     done
-    unset _SOLJVM_VERSION
-    unset JAVA_HOME
 
     # Now configure
-    export SANEFLAGS="-std=c++98 -Wno-error -fno-delete-null-pointer-checks -fno-lifetime-dse"
+    SANEFLAGS="-std=c++98 -Wno-error -fno-delete-null-pointer-checks -fno-lifetime-dse"
     bash ./configure --prefix="$installdir/usr" \
         --with-update-version=232 \
         --with-build-number=ga \
@@ -56,33 +55,38 @@ build      : |
     unset LD_AS_NEEDED
     make SCTP_WERROR= DISABLE_HOTSPOT_OS_VERSION_CHECK=ok all WARNINGS_ARE_ERRORS=
 install    : |
-    install -d -D -m 00755 $installdir/%libdir%
     make install
 
-    # Binaries
-    rm -rf $installdir/usr/bin/*
-    mv $installdir/usr/jvm/openjdk-1.8.0_232-solus $installdir/%libdir%/openjdk-8
+    # Rename the library directory
+    install -dm00755 $installdir/%libdir%
+    mv $installdir/usr/jvm/openjdk-*-solus $installdir/%libdir%/openjdk-8
     rmdir $installdir/usr/jvm
-    pushd $installdir/usr/bin
-    for i in $installdir/%libdir%/openjdk-8/bin/*; do
-      ln -sf %libdir%/openjdk-8/bin/`basename $i` .
-    done
-    popd
 
-    # Docs
-    install -m 00644 -D LICENSE $installdir/usr/share/doc/openjdk-8/LICENSE
+    # Remove license files
+    find $installdir/%libdir%/openjdk-8 \
+        \( -name ASSEMBLY_EXCEPTION -o  \
+           -name LICENSE -o             \
+           -name THIRD_PARTY_README \) -delete
 
-    # Move into build dir
-    pushd build/linux-x86_64-normal-server-release
+    # Remove symlinks to binaries
+    rm -rf $installdir/usr/bin
 
-    # Chuck the headers in
-    install -D -d -m 00755 $installdir/usr/include/openjdk-8
-    cp -ra jdk/include/* $installdir/usr/include/openjdk-8/.
+    rmdir $installdir/usr/lib64/openjdk-8/jre/lib/applet
 
-    # Sort out the manpages
-    install -D -d -m 00755 $installdir/usr/share/man/man1
-    install -m 00644 images/j2re-image/man/man1/*.1 $installdir/usr/share/man/man1/.
-    install -m 00644 images/j2sdk-image/man/man1/*.1 $installdir/usr/share/man/man1/.
+    # Move header files into the correct path
+    install -dm00755 $installdir/usr/include
+    mv $installdir/usr/lib64/openjdk-8/include $installdir/usr/include/openjdk-8
+
+    # Sort out the manpages (with a "-8" suffix)
+    install -dm00755 $installdir/usr/share
+    mv $installdir/usr/lib64/openjdk-8/man $installdir/usr/share
+    # Remove pre-existent link first
+    rm $installdir/usr/share/man/ja
+    mv -f $installdir/usr/share/man/ja_JP.UTF-8 $installdir/usr/share/man/ja
+    find $installdir/usr/share/man -type f -exec rename -- .1 '-8.1' {} \;
 
     # Add java-jar.desktop into usable apps
-    install -D -m 00644 $pkgfiles/java-jar.desktop $installdir/usr/share/applications/java-jar.desktop
+    install -Dm00644 $pkgfiles/java-jar.desktop -t $installdir/usr/share/applications
+
+    # Symlink header files (because some apps look for them in $JAVA_HOME)
+    ln -s /usr/include/openjdk-8 $installdir/usr/lib64/openjdk-8/include
