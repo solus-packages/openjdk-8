@@ -1,6 +1,6 @@
 name       : openjdk-8
 version    : 8.232
-release    : 18
+release    : 19
 source     :
     - https://getsol.us/sources/java/jdk8u232-ga.tar.bz2 : 23abb7e548611b19fc24802165d27d217657d6648b4688573a0430168e86ea77
     - https://getsol.us/sources/java/corba-u232-ga.tar.bz2 : 9958a19a9064a18e4cf249734ff1c03ad30444bff277d560027d02b8be5c3a68
@@ -40,6 +40,7 @@ setup      : |
     # Now configure
     SANEFLAGS="-std=c++98 -Wno-error -fno-delete-null-pointer-checks -fno-lifetime-dse"
     bash ./configure --prefix="$installdir/usr" \
+        --with-boot-jdk="/usr/lib64/openjdk-8/" \
         --with-update-version=232 \
         --with-build-number=ga \
         --with-milestone=solus \
@@ -85,8 +86,8 @@ install    : |
     mv -f $installdir/usr/share/man/ja_JP.UTF-8 $installdir/usr/share/man/ja
     find $installdir/usr/share/man -type f -exec rename -- .1 '-8.1' {} \;
 
-    # Add java-jar.desktop into usable apps
-    install -Dm00644 $pkgfiles/java-jar.desktop -t $installdir/usr/share/applications
+    # Add java-8-jar.desktop into usable apps
+    install -Dm00644 $pkgfiles/java-8-jar.desktop -t $installdir/usr/share/applications
 
     # Symlink header files (because some apps look for them in $JAVA_HOME)
     ln -s /usr/include/openjdk-8 $installdir/usr/lib64/openjdk-8/include

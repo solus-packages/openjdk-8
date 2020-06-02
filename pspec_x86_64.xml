@@ -2,8 +2,8 @@
     <Source>
         <Name>openjdk-8</Name>
         <Packager>
-            <Name>Fabio Forni</Name>
-            <Email>livingsilver94.solus@redaril.me</Email>
+            <Name>Campbell Jones</Name>
+            <Email>dev@serebit.com</Email>
         </Packager>
         <License>GPL-2.0-with-classpath-exception</License>
         <PartOf>programming.java</PartOf>
@@ -627,7 +627,7 @@
             <Path fileType="library">/usr/lib64/openjdk-8/sample/try-with-resources/src/Unzip.java</Path>
             <Path fileType="library">/usr/lib64/openjdk-8/sample/try-with-resources/src/ZipCat.java</Path>
             <Path fileType="library">/usr/lib64/openjdk-8/src.zip</Path>
-            <Path fileType="data">/usr/share/applications/java-jar.desktop</Path>
+            <Path fileType="data">/usr/share/applications/java-8-jar.desktop</Path>
             <Path fileType="man">/usr/share/man/ja/man1/appletviewer-8.1</Path>
             <Path fileType="man">/usr/share/man/ja/man1/extcheck-8.1</Path>
             <Path fileType="man">/usr/share/man/ja/man1/idlj-8.1</Path>
@@ -717,7 +717,7 @@
 </Description>
         <PartOf>programming.devel</PartOf>
         <RuntimeDependencies>
-            <Dependency release="18">openjdk-8</Dependency>
+            <Dependency release="19">openjdk-8</Dependency>
         </RuntimeDependencies>
         <Files>
             <Path fileType="header">/usr/include/openjdk-8/classfile_constants.h</Path>
@@ -732,12 +732,12 @@
         </Files>
     </Package>
     <History>
-        <Update release="18">
-            <Date>2020-05-13</Date>
+        <Update release="19">
+            <Date>2020-05-30</Date>
             <Version>8.232</Version>
             <Comment>Packaging update</Comment>
-            <Name>Fabio Forni</Name>
-            <Email>livingsilver94.solus@redaril.me</Email>
+            <Name>Campbell Jones</Name>
+            <Email>dev@serebit.com</Email>
         </Update>
     </History>
 </PISI>
