@@ -1,7 +1,7 @@
 #!/bin/bash
-VERSION="232"
+VERSION="252"
 REVISION="ga"
-BASEURI="http://hg.openjdk.java.net/jdk8u/jdk8u/archive"
+BASEURI="http://hg.openjdk.java.net/jdk8u/jdk8u"
 set -e
 
 # Main tarball
@@ -9,7 +9,7 @@ wget -nc "${BASEURI}/jdk8u${VERSION}-${REVISION}.tar.bz2"
 
 function fetch_and_emit()
 {
-    wget -nc http://hg.openjdk.java.net/jdk8u/jdk8u/$1/archive/jdk8u${VERSION}-${REVISION}.tar.bz2 -O $1-u${VERSION}-${REVISION}.tar.bz2
+    wget -nc ${BASEURI}/$1/archive/jdk8u${VERSION}-${REVISION}.tar.bz2 -O $1-u${VERSION}-${REVISION}.tar.bz2
 }
 
 # subproject tarballs
