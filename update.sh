@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="252"
+VERSION="$1"
 REVISION="ga"
 BASEURI="http://hg.openjdk.java.net/jdk8u/jdk8u"
 set -e
