@@ -1,17 +1,11 @@
 name       : openjdk-8
-version    : 8.252
-release    : 20
+version    : 8.292
+release    : 21
 source     :
-    - https://getsol.us/sources/java/jdk8u252-ga.tar.bz2 : a83f8daa2afece63bf7ae95cfbca91ef765424c40b9f5b45e4a3c2d4da0f7a95
-    - https://getsol.us/sources/java/corba-u252-ga.tar.bz2 : 97513397015ca62953c6afa3ba925b1dabc0238d47f3a2b81c2bd5b683d4d050
-    - https://getsol.us/sources/java/hotspot-u252-ga.tar.bz2 : 80a91f421bbe750f5e8c66b74f77fb79f31cce2f6e9e1cfe8407d773bb1ed57d
-    - https://getsol.us/sources/java/jaxp-u252-ga.tar.bz2 : ead123b56c1c5d4c381665da6c0858cd9b11c69b8afc7494f9831980bc71bc92
-    - https://getsol.us/sources/java/jaxws-u252-ga.tar.bz2 : ef6532ac77e7e4333283c09c87b6923fbaa91b8bca6770f06494c3bb1643455e
-    - https://getsol.us/sources/java/jdk-u252-ga.tar.bz2 : 7203ded24a10843ac8e84269ad8ac347f29b1dd950f7e0bb9739ddcb8280b8fb
-    - https://getsol.us/sources/java/langtools-u252-ga.tar.bz2 : 6e2329e3f15c0fd23da47cd8f454cb49cdae0b12c951eb2910061fa95acb8ea4
-    - https://getsol.us/sources/java/nashorn-u252-ga.tar.bz2 : 195237fd89f34c27bf98c3a8bfda64bbc799a014e83907062a8b4e10bd4f2021
+    - https://getsol.us/sources/jdk8u292-ga-all.tar.gz : 7e1953e2a9d9a7a818cbde074d1c1e248dac6311935f968fa0d3616bf781d5c1
 license    : GPL-2.0-with-classpath-exception
 component  : programming.java
+homepage   : https://openjdk.java.net/
 summary    : Open implementation of Oracle's Java Development Kit, major version 8
 description: |
     Open implementation of Oracle's Java Development Kit, major version 8. This package includes both the JDK and its accompanying JRE, with OpenJFX in a separate package.
@@ -30,28 +24,25 @@ builddeps  :
 patterns   :
     - devel: /usr/lib64/openjdk-8/include 
 setup      : |
-    # Prep input tarballs
-    SOLJVM_VERSION="u252-ga"
-    for tarball in corba hotspot jaxp jaxws langtools jdk nashorn; do
-        mkdir -pv ${tarball} &&
-            tar -xf $sources/${tarball}-${SOLJVM_VERSION}.tar.bz2 --strip-components=1 -C ${tarball}
-    done
+    SANECFLAGS="-Wno-error -fno-delete-null-pointer-checks -fno-lifetime-dse"
+    SANECXXFLAGS="$SANECFLAGS -std=c++98"
+    UPDATE_VERSION=${version:2}
 
     # Now configure
-    SANEFLAGS="-std=c++98 -Wno-error -fno-delete-null-pointer-checks -fno-lifetime-dse"
     bash ./configure --prefix="$installdir/usr" \
         --with-boot-jdk="/usr/lib64/openjdk-8/" \
-        --with-update-version=252 \
+        --with-native-debug-symbols=internal \
+        --with-update-version=$UPDATE_VERSION \
         --with-build-number=ga \
         --with-milestone=solus \
         --with-zlib=system \
         --with-giflib=system \
         --enable-unlimited-crypto \
+        --with-extra-cflags="$CFLAGS $SANECFLAGS" \
+        --with-extra-cxxflags="$CXXFLAGS $SANECXXFLAGS" \
+        --with-extra-ldflags="$LDFLAGS" \
         --with-cacerts-file=%libdir%/openjdk-8/jre/lib/security/cacerts \
-        --with-jobs=%YJOBS% \
-        --with-extra-cflags="$CFLAGS $SANEFLAGS" \
-        --with-extra-cxxflags="$CXXFLAGS $SANEFLAGS" \
-        --with-extra-ldflags="$LDFLAGS"
+        --with-jobs=%YJOBS%
 build      : |
     unset LD_AS_NEEDED
     make SCTP_WERROR= DISABLE_HOTSPOT_OS_VERSION_CHECK=ok all WARNINGS_ARE_ERRORS=
@@ -73,6 +64,7 @@ install    : |
     rm -rf $installdir/usr/bin
 
     rmdir $installdir/usr/lib64/openjdk-8/jre/lib/applet
+    rm -rf $installdir/usr/lib64/openjdk-8/{demo,sample}
 
     # Move header files into the correct path
     install -dm00755 $installdir/usr/include
