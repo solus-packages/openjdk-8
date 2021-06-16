@@ -1,6 +1,6 @@
 name       : openjdk-8
 version    : 8.292
-release    : 21
+release    : 22
 source     :
     - https://getsol.us/sources/jdk8u292-ga-all.tar.gz : 7e1953e2a9d9a7a818cbde074d1c1e248dac6311935f968fa0d3616bf781d5c1
 license    : GPL-2.0-with-classpath-exception
@@ -22,7 +22,7 @@ builddeps  :
     - pkgconfig(xtst)
     - p7zip
 patterns   :
-    - devel: /usr/lib64/openjdk-8/include 
+    - devel : /usr/lib64/openjdk-8/include
 setup      : |
     SANECFLAGS="-Wno-error -fno-delete-null-pointer-checks -fno-lifetime-dse"
     SANECXXFLAGS="$SANECFLAGS -std=c++98"
