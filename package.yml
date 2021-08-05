@@ -1,8 +1,8 @@
 name       : openjdk-8
-version    : 8.292
-release    : 22
+version    : 8.302
+release    : 23
 source     :
-    - https://getsol.us/sources/jdk8u292-ga-all.tar.gz : 7e1953e2a9d9a7a818cbde074d1c1e248dac6311935f968fa0d3616bf781d5c1
+    - https://getsol.us/sources/jdk8u302-ga-all.tar.gz : f85868a56c0d3b422e1ac99d8c2ea669d88609a28c7cb3fd8786523fed5c7013
 license    : GPL-2.0-with-classpath-exception
 component  : programming.java
 homepage   : https://openjdk.java.net/
